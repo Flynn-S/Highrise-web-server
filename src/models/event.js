@@ -4,10 +4,10 @@ const { Schema, model } = mongoose;
 
 const EventSchema = new Schema(
   {
-    name: String,
-    eventDates: Date,
+    name: {type: String, required: true},
+    eventDate: {type: Date, required: true},
     lineUp: [{ type: String }],
-    ticketsAvailble: Number,
+    ticketsAvailable: Number,
     ticketsSold: Number,
     // attendees: [{ type: Schema.Type.ObjectId, ref: "User" }],
   },

@@ -7,6 +7,7 @@ import listEndpoints from "express-list-endpoints";
 
 import authRouter from "./routes/auth.js";
 import usersRouter from "./routes/users.js";
+import ticketsRouter from "./routes/tickets.js";
 import cartRouter from "./routes/cart.js";
 
 import { jwtAuth } from "./auth/index.js";
@@ -41,6 +42,7 @@ app.use(cookieParser());
 //ROUTES
 app.use("/", authRouter);
 app.use("/users", jwtAuth, usersRouter);
+app.use("/tickets", jwtAuth, ticketsRouter);
 app.use("/cart", jwtAuth, cartRouter);
 
 // ERROR HANDLERS
