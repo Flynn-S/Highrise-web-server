@@ -9,30 +9,38 @@ import authRouter from "./routes/auth.js";
 import usersRouter from "./routes/users.js";
 import ticketsRouter from "./routes/tickets.js";
 import cartRouter from "./routes/cart.js";
+import eventsRouter from "./routes/events.js";
 
 import { jwtAuth } from "./auth/index.js";
+
+import ErrorResponse from "./utilities/errorResponse.js";
 
 import { errorHandler, routeNotFoundHandler } from "./errors/errorHandling.js";
 
 const app = express();
 
-app.use(cors({ origin: "localhost:5000", credentials: true }));
+// app.use(cors({ origin: "localhost:5000", credentials: true }));
 //fill cors white list later
-//   const whiteList = [process.env.FE_URL_DEV, process.env.FE_URL_PROD];
-//   // heroku config
+// const whiteList = [process.env.FE_URL_DEV, process.env.FE_URL_PROD];
+// // heroku config
 
-//   const corsOptions = {
-//     origin: function (origin, next) {
-//       if (whiteList.indexOf(origin) !== -1) {
-//         console.log("ORIGIN: ", origin);
-//         //origin is in whitelist
-//         next(null, true);
-//       } else {
-//         // origin is not in whitelist,
-//         next(new ErrorResponse(`URL NOT FOUND IN WHITELIST - blocked by cors`, 403));
-//       }
-//     },
-//   };
+// const corsOptions = {
+//   origin: function (origin, next) {
+//     if (whiteList.indexOf(origin) !== -1) {
+//       console.log("ORIGIN: ", origin);
+//       //origin is in whitelist
+//       next(null, true);
+//     } else {
+//       // origin is not in whitelist,
+//       next(
+//         new ErrorResponse(`URL NOT FOUND IN WHITELIST - blocked by cors`, 403)
+//       );
+//     }
+//   },
+// };
+
+// app.use(cors(corsOptions));
+app.use(cors());
 
 app.use(express.json());
 app.use(cookieParser());
@@ -42,8 +50,9 @@ app.use(cookieParser());
 //ROUTES
 app.use("/", authRouter);
 app.use("/users", jwtAuth, usersRouter);
-app.use("/tickets", jwtAuth, ticketsRouter);
+app.use("/tickets", ticketsRouter);
 app.use("/cart", jwtAuth, cartRouter);
+app.use("/events", eventsRouter);
 
 // ERROR HANDLERS
 

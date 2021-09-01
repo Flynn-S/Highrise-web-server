@@ -36,7 +36,7 @@ const UserSchema = new Schema(
     },
     userType: { type: String, enum: ["user", "admin"], default: "user" },
     cart: { type: Schema.Types.ObjectId, ref: "Cart" },
-    refreshToken: { type: String }, 
+    refreshToken: { type: String },
     // resetPasswordToken: String,
     // resetPasswordExpire: Date,
     // tickets: [{ type: Schema.Types.ObjectId, ref: "Ticket" }],

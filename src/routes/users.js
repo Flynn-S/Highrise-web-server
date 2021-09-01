@@ -2,6 +2,7 @@ import { Router } from "express";
 import user from "../models/user.js";
 import { adminOnly } from "../auth/index.js";
 import UserModel from "../models/user.js";
+import ErrorResponse from "../utilities/errorResponse.js";
 
 const usersRouter = Router();
 
@@ -14,6 +15,32 @@ usersRouter.get("/me", async (req, res, next) => {
   }
 });
 
+usersRouter.post("/me", async (req, res, next) => {
+  try {
+    const newUser = new UserModel(req.body);
+    await newUser.save();
+    res.status(201).send(req.user);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+});
+
+// upload profile image
+usersRouter.post(
+  ("/me",
+  async (req, res, next) => {
+    const modified = await UserModel.findByIdAndUpdate(
+      req.user.id,
+      {
+        image: req.file.path,
+      },
+      { runValidators: true, new: true }
+    );
+    res.status(200).send(modified);
+  })
+);
+
 usersRouter.put("/me", async (req, res, next) => {
   try {
     const updates = Object.keys(req.body); // creates an array of User Object properties that are in the request body [email, password etc]
@@ -23,6 +50,22 @@ usersRouter.put("/me", async (req, res, next) => {
     await req.user.save();
 
     res.status(200).send(req.user);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Update a users profile details by id
+usersRouter.put("/:id", adminOnly, async (req, res, next) => {
+  try {
+    const modified = await Profile.findByIdAndUpdate(req.params.id, req.body, {
+      runValidators: true,
+      new: true,
+    });
+    if (!modified) {
+      return next(new ErrorResponse(`resource not found with that id`, 404));
+    }
+    res.status(200).send(modified);
   } catch (error) {
     next(error);
   }
@@ -41,6 +84,5 @@ usersRouter.get("/", adminOnly, async (req, res, next) => {
     next(error);
   }
 });
-// s.get("/:id", async (req, res, next) => {});
 
 export default usersRouter;
