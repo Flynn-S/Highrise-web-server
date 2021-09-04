@@ -5,30 +5,30 @@ import { adminOnly } from "../auth/index.js";
 const eventsRouter = express.Router();
 
 // get all events
-// eventsRouter.get("/", async (req, res, next) => {
-//   try {
-//     const events = await EventModel.find({});
-
-//     res.status(200).send({ events });
-//   } catch (error) {
-//     console.log(error);
-//     next(error);
-//   }
-// });
-
 eventsRouter.get("/", async (req, res, next) => {
   try {
-    const query = q2m(req.query);
-    const total = await EventModel.countDocuments(query.criteria);
-    const events = await EventModel.find(query.criteria, query.options.fields)
-      .skip(query.options.skip)
-      .limit(query.options.limit)
-      .sort(query.options.sort);
-    res.send({ links: query.links("/events", total), total, events });
+    const events = await EventModel.find({});
+
+    res.status(200).send({ events });
   } catch (error) {
+    console.log(error);
     next(error);
   }
 });
+
+// eventsRouter.get("/", async (req, res, next) => {
+//   try {
+//     const query = q2m(req.query);
+//     const total = await EventModel.countDocuments(query.criteria);
+//     const events = await EventModel.find(query.criteria, query.options.fields)
+//       .skip(query.options.skip)
+//       .limit(query.options.limit)
+//       .sort(query.options.sort);
+//     res.send({ links: query.links("/events", total), total, events });
+//   } catch (error) {
+//     next(error);
+//   }
+// });
 
 // get singular event by ID
 eventsRouter.get("/:id", async (req, res, next) => {
