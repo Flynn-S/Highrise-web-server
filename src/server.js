@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import { env } from "process";
 
 import cookieParser from "cookie-parser";
 import listEndpoints from "express-list-endpoints";
@@ -19,7 +20,7 @@ import { errorHandler, routeNotFoundHandler } from "./errors/errorHandling.js";
 
 const app = express();
 
-app.use(cors({ origin: "localhost:5000", credentials: true }));
+app.use(cors({ origin: "localhost:3000", credentials: true }));
 //fill cors white list later
 const whiteList = [process.env.FE_URL_DEV, process.env.FE_URL_PROD];
 // heroku config

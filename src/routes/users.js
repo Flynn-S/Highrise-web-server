@@ -27,19 +27,16 @@ usersRouter.post("/me", async (req, res, next) => {
 });
 
 // upload profile image
-usersRouter.post(
-  ("/me",
-  async (req, res, next) => {
-    const modified = await UserModel.findByIdAndUpdate(
-      req.user.id,
-      {
-        image: req.file.path,
-      },
-      { runValidators: true, new: true }
-    );
-    res.status(200).send(modified);
-  })
-);
+usersRouter.post("/me", async (req, res, next) => {
+  const modified = await UserModel.findByIdAndUpdate(
+    req.user.id,
+    {
+      image: req.file.path,
+    },
+    { runValidators: true, new: true }
+  );
+  res.status(200).send(modified);
+});
 
 usersRouter.put("/me", async (req, res, next) => {
   try {
@@ -81,6 +78,20 @@ usersRouter.get("/", adminOnly, async (req, res, next) => {
     res.send(findUser);
   } catch (error) {
     console.log(error);
+    next(error);
+  }
+});
+
+usersRouter.get("/", adminOnly, async (req, res, next) => {
+  try {
+    const query = q2m(req.query);
+    const total = await UserModel.countDocuments(query.criteria);
+    const users = await UserModel.find(query.criteria, query.options.fields)
+      .skip(query.options.skip)
+      .limit(query.options.limit)
+      .sort(query.options.sort);
+    res.send({ links: query.links("/users", total), total, users });
+  } catch (error) {
     next(error);
   }
 });
