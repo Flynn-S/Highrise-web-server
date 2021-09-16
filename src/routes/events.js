@@ -91,7 +91,7 @@ eventsRouter.put("/:id", async (req, res, next) => {
 });
 
 // delete event
-eventsRouter.delete("/:id", adminOnly, async (req, res, next) => {
+eventsRouter.delete("/:id", async (req, res, next) => {
   const event = await EventModel.findByIdAndDelete(req.params.id);
   if (event) {
     res.send(`Post deleted`);

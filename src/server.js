@@ -20,7 +20,7 @@ import { errorHandler, routeNotFoundHandler } from "./errors/errorHandling.js";
 
 const app = express();
 
-app.use(cors({ origin: "localhost:3000", credentials: true }));
+// app.use(cors({ origin: "localhost:3000", credentials: true }));
 //fill cors white list later
 const whiteList = [process.env.FE_URL_DEV, process.env.FE_URL_PROD];
 // heroku config
@@ -38,6 +38,7 @@ const corsOptions = {
       );
     }
   },
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
