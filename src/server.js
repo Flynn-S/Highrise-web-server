@@ -11,6 +11,7 @@ import usersRouter from "./routes/users.js";
 import ticketsRouter from "./routes/tickets.js";
 import cartRouter from "./routes/cart.js";
 import eventsRouter from "./routes/events.js";
+import paymentRouter from "./routes/payment.js";
 
 import { jwtAuth } from "./auth/index.js";
 
@@ -52,9 +53,10 @@ app.use(cookieParser());
 //ROUTES
 app.use("/", authRouter);
 app.use("/users", jwtAuth, usersRouter);
-app.use("/tickets", ticketsRouter);
+app.use("/tickets", jwtAuth, ticketsRouter);
+app.use("/payment", jwtAuth, paymentRouter);
 app.use("/cart", jwtAuth, cartRouter);
-app.use("/events", eventsRouter);
+app.use("/events", jwtAuth, eventsRouter);
 
 // ERROR HANDLERS
 

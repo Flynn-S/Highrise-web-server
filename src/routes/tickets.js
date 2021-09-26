@@ -13,7 +13,7 @@ ticketsRouter.get("/", async (req, res, next) => {
   try {
     const tickets = await TicketModel.find({})
       .populate({
-        path: ("ownerId", "name email"),
+        path: "ownerId",
         model: UserModel,
       })
       .populate({ path: "eventId", model: EventModel });
@@ -28,7 +28,10 @@ ticketsRouter.get("/", async (req, res, next) => {
 // get singular ticket by ID
 ticketsRouter.get("/:id", async (req, res, next) => {
   try {
-    const ticket = await TicketModel.findById(req.params.id);
+    const ticket = await TicketModel.findById(req.params.id).populate({
+      path: "ownerId",
+      select: "name",
+    });
     // .populate({
     //   path: ("ownerId", "name email"),
     //   model: UserModel,

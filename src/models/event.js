@@ -11,7 +11,7 @@ const EventSchema = new Schema(
     description: String,
     image: { type: String },
     ticketsAvailable: Number,
-    ticketsSold: Number,
+    ticketsSold: { type: Number, default: 0 },
     // attendees: [{ type: Schema.Type.ObjectId, ref: "User" }],
   },
   { timestamps: true }

@@ -24,7 +24,7 @@ authRouter.post("/register", async (req, res, next) => {
       sameSite: "lax",
       httpOnly: true,
     });
-    res.status(201).send(_id);
+    res.status(201).send({ message: "Registration succesful" });
   } catch (error) {
     next(error);
   }
@@ -44,9 +44,9 @@ authRouter.post("/login", async (req, res, next) => {
         sameSite: "lax",
         httpOnly: true,
       });
-      res.status(200).send("Login Successful");
+      res.status(200).send({ message: "Login Successful" });
     } else {
-      res.status(401).send("inncorrect credentials");
+      res.status(401).send({ error: "Incorrect credentials" });
     }
   } catch (error) {
     console.log(error);

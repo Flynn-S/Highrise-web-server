@@ -6,7 +6,7 @@ const TicketSchema = new Schema({
   ownerId: { type: Schema.Types.ObjectId, ref: "User" },
   name: { type: String, required: [true, "Field must not be blank"] },
   surname: { type: String, required: [true, "Field must not be blank"] },
-  price: Number,
+  price: { type: Number, required: true },
   isValid: { type: Boolean, default: true },
 });
 

@@ -94,9 +94,9 @@ eventsRouter.put("/:id", async (req, res, next) => {
 eventsRouter.delete("/:id", async (req, res, next) => {
   const event = await EventModel.findByIdAndDelete(req.params.id);
   if (event) {
-    res.send(`Post deleted`);
+    res.send(`Event deleted`);
   } else {
-    res.status(404).send(`Post with id ${req.params.postId} not found`);
+    res.status(404).send(`Event with id ${req.params.eventId} not found`);
   }
 });
 
