@@ -21,7 +21,7 @@
     "express": "^4.17.1",
     "express-list-endpoints": "^5.0.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.12.14",
+    "mongoose": "^6.0.8",
     "multer-storage-cloudinary": "^4.0.0",
     "query-to-mongo": "^0.10.1",
     "stripe": "^8.176.0"

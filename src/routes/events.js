@@ -37,7 +37,7 @@ eventsRouter.get("/:id", async (req, res, next) => {
     if (event) {
       res.status(200).send(event);
     } else {
-      res.status(404).send(`Post with iid ${req.params.id} does not exist`);
+      res.status(404).send(`Post with id ${req.params.id} does not exist`);
     }
   } catch (error) {
     next(error);

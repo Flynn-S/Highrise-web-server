@@ -19,8 +19,9 @@ paymentRouter.post("/", async (req, res, next) => {
       confirm: true,
     });
     console.log("Payment", payment);
+
     res.json({
-      message: "Payment successful",
+      message: { message: "Payment successful", payment: payment },
       success: true,
     });
   } catch (error) {
