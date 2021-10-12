@@ -5,6 +5,9 @@ import UserModel from "../models/user.js";
 import ErrorResponse from "../utilities/errorResponse.js";
 import tickets from "../models/tickets.js";
 
+import multerUpload from "../middlewares/pictures/pictureUpload.js";
+const upload = multerUpload();
+
 const usersRouter = Router();
 
 usersRouter.get("/me", async (req, res, next) => {
@@ -57,7 +60,7 @@ usersRouter.put("/me", async (req, res, next) => {
 });
 
 // Update a users profile details by id
-usersRouter.put("/:id", adminOnly, async (req, res, next) => {
+usersRouter.put("/:id", upload, async (req, res, next) => {
   try {
     const modified = await Profile.findByIdAndUpdate(req.params.id, req.body, {
       runValidators: true,

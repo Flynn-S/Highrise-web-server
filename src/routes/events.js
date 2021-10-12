@@ -4,6 +4,9 @@ import Stripe from "stripe";
 import { adminOnly } from "../auth/index.js";
 import TicketModel from "../models/tickets.js";
 
+import multerUpload from "../middlewares/pictures/pictureUpload.js";
+const upload = multerUpload();
+
 const stripe = Stripe(process.env.STRIPE_SECRET_TEST);
 
 export const checkoutHandler = async (req, res, next) => {
@@ -121,7 +124,7 @@ eventsRouter.post("/", async (req, res, next) => {
 });
 
 // upload event picture
-eventsRouter.post("/:id", async (req, res, next) => {
+eventsRouter.post("/:id", upload, async (req, res, next) => {
   const modifiedEvent = await EventModel.findByIdAndUpdate(
     req.params.id,
     {
