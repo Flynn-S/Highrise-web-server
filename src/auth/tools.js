@@ -2,18 +2,19 @@ import jwt from "jsonwebtoken";
 import UserModel from "../models/user.js";
 
 // generates a new JWT access token taking in user object generated from usermodel
-const generateJWT = (user) =>
-  new Promise((res, rej) =>
+const generateJWT = (userId) =>
+  new Promise((res, rej) => {
+    console.log(userId);
     jwt.sign(
-      user,
+      userId,
       process.env.JWT_SECRET,
-      { expiresIn: "30d" },
+      { expiresIn: "1d" },
       (error, token) => {
         if (error) rej(error);
         res(token);
       }
-    )
-  );
+    );
+  });
 
 export const verifyJWT = (token) =>
   new Promise((res, rej) =>
@@ -23,12 +24,12 @@ export const verifyJWT = (token) =>
     })
   );
 
-const generateRefreshJWT = (user) =>
+const generateRefreshJWT = (userId) =>
   new Promise((res, rej) =>
     jwt.sign(
-      user,
+      userId,
       process.env.REFRESH_TOKEN_SECRET,
-      { expiresIn: "7d" },
+      { expiresIn: "30d" },
       (error, token) => {
         if (error) rej(error);
         res(token);
@@ -60,7 +61,9 @@ const verifyRefreshToken = (token) =>
 
 export const auth = async (user) => {
   const newAccessToken = await generateJWT({ _id: user._id });
+
   const newRefreshToken = await generateRefreshJWT({ _id: user._id });
+
   user.refreshToken = newRefreshToken;
   await user.save();
   return { accessToken: newAccessToken, refreshToken: newRefreshToken };

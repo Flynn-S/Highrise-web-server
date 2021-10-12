@@ -11,7 +11,14 @@ const EventSchema = new Schema(
     description: String,
     image: { type: String },
     ticketsAvailable: Number,
-    ticketsSold: { type: Number, default: 0 },
+    capacity: { type: Number, required: true },
+    ticketPriceTiers: [
+      {
+        pricingTier: Number,
+        pricePence: Number,
+      },
+    ],
+
     // attendees: [{ type: Schema.Type.ObjectId, ref: "User" }],
   },
   { timestamps: true }

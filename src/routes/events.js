@@ -1,20 +1,93 @@
 import express from "express";
 import EventModel from "../models/event.js";
+import Stripe from "stripe";
 import { adminOnly } from "../auth/index.js";
+import TicketModel from "../models/tickets.js";
 
-const eventsRouter = express.Router();
+const stripe = Stripe(process.env.STRIPE_SECRET_TEST);
 
-// get all events
-eventsRouter.get("/", async (req, res, next) => {
+export const checkoutHandler = async (req, res, next) => {
+  const { amount, id, ticketQuantity, name, surname, price } = req.body;
+  console.log(req.user);
+  const user = req.user;
+
+  const event = await EventModel.findById(req.params.id);
+  console.log(event);
+  if (!event) {
+    res.status(404).send(`event with id ${req.params.id} does not exist`);
+    return;
+  }
+  if (event.ticketsAvailable - ticketQuantity < 0) {
+    res.status(200).send({
+      message:
+        "The requested number of tickets is not available - reduce and try again",
+    });
+    return;
+  }
+
+  try {
+    const payment = await stripe.paymentIntents.create({
+      amount,
+      currency: "GBP",
+      payment_method: id,
+      payment_method_types: ["card"],
+      confirm: true,
+    });
+    console.log("Payment", payment);
+
+    // res.json({
+    //   message: { message: "Payment successful", payment: payment },
+    //   success: true,
+    // });
+  } catch (error) {
+    console.log("Error", error);
+    res.json({
+      message: "Payment failed",
+      success: false,
+    });
+    return;
+  }
+  // if ()
+  // req.body.ticketQuantity;
+  const newticket = new TicketModel({
+    name,
+    surname,
+    price,
+    eventId: event._id,
+    ownerId: user._id,
+  });
+  event._id = await newticket.save();
+
+  res.status(201).send(newticket);
+};
+
+export const getEventHandler = async (req, res, next) => {
+  try {
+    const event = await EventModel.findById(req.params.id);
+    if (event) {
+      res.status(200).send(event);
+    } else {
+      res.status(404).send(`Event with id ${req.params.id} does not exist`);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getAllEventsHandler = async (req, res, next) => {
   try {
     const events = await EventModel.find({});
-
     res.status(200).send({ events });
   } catch (error) {
     console.log(error);
     next(error);
   }
-});
+};
+
+const eventsRouter = express.Router();
+
+// get all events
+eventsRouter.get("/", getAllEventsHandler);
 
 // eventsRouter.get("/", async (req, res, next) => {
 //   try {
@@ -31,18 +104,8 @@ eventsRouter.get("/", async (req, res, next) => {
 // });
 
 // get singular event by ID
-eventsRouter.get("/:id", async (req, res, next) => {
-  try {
-    const event = await EventModel.findById(req.params.id);
-    if (event) {
-      res.status(200).send(event);
-    } else {
-      res.status(404).send(`Post with id ${req.params.id} does not exist`);
-    }
-  } catch (error) {
-    next(error);
-  }
-});
+
+eventsRouter.get("/:id", getEventHandler);
 
 // post new event
 eventsRouter.post("/", async (req, res, next) => {
@@ -99,5 +162,8 @@ eventsRouter.delete("/:id", async (req, res, next) => {
     res.status(404).send(`Event with id ${req.params.eventId} not found`);
   }
 });
+
+// checkout route
+eventsRouter.post("/:id/checkout", checkoutHandler);
 
 export default eventsRouter;

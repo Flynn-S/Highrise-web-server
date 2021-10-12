@@ -3,12 +3,16 @@ import user from "../models/user.js";
 import { adminOnly } from "../auth/index.js";
 import UserModel from "../models/user.js";
 import ErrorResponse from "../utilities/errorResponse.js";
+import tickets from "../models/tickets.js";
 
 const usersRouter = Router();
 
 usersRouter.get("/me", async (req, res, next) => {
   try {
-    res.send(req.user);
+    const loggedInUser = await UserModel.findById(req.user.id).populate(
+      "tickets"
+    );
+    res.status(200).send({ user: loggedInUser });
   } catch (error) {
     console.log(error);
     next(error);
@@ -19,7 +23,7 @@ usersRouter.post("/me", async (req, res, next) => {
   try {
     const newUser = new UserModel(req.body);
     await newUser.save();
-    res.status(201).send(req.user);
+    res.status(201).send(req[user]);
   } catch (error) {
     console.log(error);
     next(error);
