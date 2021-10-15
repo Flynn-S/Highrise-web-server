@@ -3,18 +3,20 @@ import user from "../models/user.js";
 import { adminOnly } from "../auth/index.js";
 import UserModel from "../models/user.js";
 import ErrorResponse from "../utilities/errorResponse.js";
-import tickets from "../models/tickets.js";
+import Ticket from "../models/tickets.js";
 
-import multerUpload from "../middlewares/pictures/pictureUpload.js";
+import multerUpload from "../pictures/pictureUpload.js";
 const upload = multerUpload();
 
 const usersRouter = Router();
 
 usersRouter.get("/me", async (req, res, next) => {
   try {
-    const loggedInUser = await UserModel.findById(req.user.id).populate(
-      "tickets"
-    );
+    const loggedInUser = await UserModel.findById(req.user.id).populate({
+      path: "tickets",
+      model: Ticket,
+    });
+
     res.status(200).send({ user: loggedInUser });
   } catch (error) {
     console.log(error);
@@ -34,7 +36,7 @@ usersRouter.post("/me", async (req, res, next) => {
 });
 
 // upload profile image
-usersRouter.post("/me", async (req, res, next) => {
+usersRouter.post("/me/uploadPhoto", async (req, res, next) => {
   const modified = await UserModel.findByIdAndUpdate(
     req.user.id,
     {
@@ -62,7 +64,7 @@ usersRouter.put("/me", async (req, res, next) => {
 // Update a users profile details by id
 usersRouter.put("/:id", upload, async (req, res, next) => {
   try {
-    const modified = await Profile.findByIdAndUpdate(req.params.id, req.body, {
+    const modified = await Profile.findByIdAndUpdate(req.user._id, req.body, {
       runValidators: true,
       new: true,
     });

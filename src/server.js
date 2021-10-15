@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import { env } from "process";
+import morgan from "morgan";
 
 import cookieParser from "cookie-parser";
 import listEndpoints from "express-list-endpoints";
@@ -12,6 +12,7 @@ import ticketsRouter from "./routes/tickets.js";
 import cartRouter from "./routes/cart.js";
 import eventsRouter from "./routes/events.js";
 import paymentRouter from "./routes/payment.js";
+import contactRouter from "./routes/contact.js";
 
 import { jwtAuth } from "./auth/index.js";
 
@@ -20,6 +21,8 @@ import ErrorResponse from "./utilities/errorResponse.js";
 import { errorHandler, routeNotFoundHandler } from "./errors/errorHandling.js";
 
 const app = express();
+
+app.use(morgan("dev"));
 
 // app.use(cors({ origin: "localhost:3000", credentials: true }));
 //fill cors white list later
@@ -56,6 +59,7 @@ app.use("/users", jwtAuth, usersRouter);
 app.use("/tickets", jwtAuth, ticketsRouter);
 app.use("/payment", jwtAuth, paymentRouter);
 app.use("/cart", jwtAuth, cartRouter);
+app.use("/contact", jwtAuth, contactRouter);
 app.use("/events", jwtAuth, eventsRouter);
 
 // ERROR HANDLERS

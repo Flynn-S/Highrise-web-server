@@ -2,7 +2,7 @@ import multer from "multer";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import { v2 as cloudinaryV2 } from "cloudinary";
 import { extname } from "path";
-import ErrorResponse from "../../utilities/errorResponse.js";
+import ErrorResponse from "../utilities/errorResponse.js";
 
 const multerUploadCloudinary = () => {
   const cloudinaryStorage = new CloudinaryStorage({

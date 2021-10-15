@@ -4,7 +4,7 @@ import Stripe from "stripe";
 import { adminOnly } from "../auth/index.js";
 import TicketModel from "../models/tickets.js";
 
-import multerUpload from "../middlewares/pictures/pictureUpload.js";
+import multerUpload from "../pictures/pictureUpload.js";
 const upload = multerUpload();
 
 const stripe = Stripe(process.env.STRIPE_SECRET_TEST);
@@ -38,10 +38,10 @@ export const checkoutHandler = async (req, res, next) => {
     });
     console.log("Payment", payment);
 
-    // res.json({
-    //   message: { message: "Payment successful", payment: payment },
-    //   success: true,
-    // });
+    res.json({
+      paymentObject: { message: "Payment successful", payment: payment },
+      success: true,
+    });
   } catch (error) {
     console.log("Error", error);
     res.json({
@@ -50,8 +50,7 @@ export const checkoutHandler = async (req, res, next) => {
     });
     return;
   }
-  // if ()
-  // req.body.ticketQuantity;
+  // create paid for tickets
   const newticket = new TicketModel({
     name,
     surname,
@@ -124,7 +123,7 @@ eventsRouter.post("/", async (req, res, next) => {
 });
 
 // upload event picture
-eventsRouter.post("/:id", upload, async (req, res, next) => {
+eventsRouter.post("/:id/uploadPhoto", upload, async (req, res, next) => {
   const modifiedEvent = await EventModel.findByIdAndUpdate(
     req.params.id,
     {
