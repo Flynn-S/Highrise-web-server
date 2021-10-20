@@ -85,6 +85,8 @@ export const getAllEventsHandler = async (req, res, next) => {
     // const page = Number(req.query.currentPage) || 1;
     // console.log(req.query.name);
     // const total = await EventModel.countDocuments(req.query.name);
+
+    console.log(req.query.name);
     const filteredEvents = await EventModel.find({
       name: { $regex: req.query.name, $options: "i" },
     });
