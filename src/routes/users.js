@@ -3,7 +3,7 @@ import user from "../models/user.js";
 import { adminOnly } from "../auth/index.js";
 import UserModel from "../models/user.js";
 import ErrorResponse from "../utilities/errorResponse.js";
-import Ticket from "../models/tickets.js";
+import TicketModel from "../models/tickets.js";
 
 import multerUpload from "../pictures/pictureUpload.js";
 const upload = multerUpload();
@@ -14,7 +14,7 @@ usersRouter.get("/me", async (req, res, next) => {
   try {
     const loggedInUser = await UserModel.findById(req.user.id).populate({
       path: "tickets",
-      model: Ticket,
+      model: TicketModel,
     });
 
     res.status(200).send({ user: loggedInUser });

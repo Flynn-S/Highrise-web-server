@@ -3,6 +3,7 @@ import EventModel from "../models/event.js";
 import Stripe from "stripe";
 import { adminOnly } from "../auth/index.js";
 import TicketModel from "../models/tickets.js";
+import q2m from "query-to-mongo";
 
 import multerUpload from "../pictures/pictureUpload.js";
 const upload = multerUpload();
@@ -78,8 +79,23 @@ export const getEventHandler = async (req, res, next) => {
 
 export const getAllEventsHandler = async (req, res, next) => {
   try {
-    const events = await EventModel.find({});
-    res.status(200).send({ events });
+    // const events = await EventModel.find({});
+    // res.status(200).send({ events });
+    // const pageSize = req.query.eventsPerPage;
+    // console.log(req.query.currentPage);
+    // const page = Number(req.query.currentPage) || 1;
+    // console.log(req.query.name);
+    // const total = await EventModel.countDocuments(req.query.name);
+    const filteredEvents = await EventModel.find({
+      name: { $regex: req.query.name, $options: "i" },
+    });
+    // .limit(pageSize)
+    // .skip(pageSize * (page - 1));
+    res.status(200).send({
+      events: filteredEvents,
+      // page,
+      // pages: Math.ceil(total / pageSize),
+    });
   } catch (error) {
     console.log(error);
     next(error);
