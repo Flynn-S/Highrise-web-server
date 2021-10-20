@@ -55,12 +55,12 @@ app.use(cookieParser());
 
 //ROUTES
 app.use("/", authRouter);
-app.use("/users", jwtAuth, usersRouter);
-app.use("/tickets", jwtAuth, ticketsRouter);
-app.use("/payment", jwtAuth, paymentRouter);
+app.use("/users", usersRouter);
+app.use("/tickets", ticketsRouter);
+app.use("/payment", paymentRouter);
 app.use("/cart", jwtAuth, cartRouter);
-app.use("/contact", jwtAuth, contactRouter);
-app.use("/events", jwtAuth, eventsRouter);
+app.use("/contact", contactRouter);
+app.use("/events", eventsRouter);
 
 // ERROR HANDLERS
 

@@ -3,7 +3,6 @@ import EventModel from "../models/event.js";
 import Stripe from "stripe";
 import { adminOnly } from "../auth/index.js";
 import TicketModel from "../models/tickets.js";
-import q2m from "query-to-mongo";
 
 import multerUpload from "../pictures/pictureUpload.js";
 const upload = multerUpload();
