@@ -53,6 +53,7 @@ ticketsRouter.post("/", async (req, res, next) => {
     // const newTicket = await TicketModel.create({...req.body});
     const newticket = new TicketModel(req.body);
     await newticket.save();
+    
 
     res.status(201).send(newticket);
   } catch (error) {

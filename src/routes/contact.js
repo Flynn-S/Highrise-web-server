@@ -58,7 +58,7 @@ contactRouter.post("/", (req, res, next) => {
     if (error) {
       next(error);
     } else {
-      res.status(200).json({ status: "Message Sent" });
+      res.status(200).send("Message Sent");
     }
   });
 });
