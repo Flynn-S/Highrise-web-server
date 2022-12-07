@@ -12,7 +12,7 @@ import ticketsRouter from "./routes/tickets.js";
 import cartRouter from "./routes/cart.js";
 import eventsRouter from "./routes/events.js";
 import paymentRouter from "./routes/payment.js";
-import contactRouter from "./routes/contact.js";
+// import contactRouter from "./routes/contact.js";
 
 import { jwtAuth } from "./auth/index.js";
 
@@ -59,7 +59,7 @@ app.use("/users", jwtAuth, usersRouter);
 app.use("/tickets", jwtAuth, ticketsRouter);
 app.use("/payment", jwtAuth, paymentRouter);
 app.use("/cart", jwtAuth, cartRouter);
-app.use("/contact", jwtAuth, contactRouter);
+// app.use("/contact", jwtAuth, contactRouter);
 app.use("/events", jwtAuth, eventsRouter);
 
 // ERROR HANDLERS
